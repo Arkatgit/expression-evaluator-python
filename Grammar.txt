@@ -1,0 +1,14 @@
+Expr				 --> AddExpr
+AddExpr			 --> MulExpr { ("+" | "-") MulExpr }
+MulExpr			 --> UnaryExpr { ("*" | "/" | "mod") UnaryExpr }
+UnaryExpr		 --> PrimaryExpr
+				        | ("+" | "-") UnaryExpr
+PrimaryExpr  --> number
+				        | Ident
+				        | Ident "(" [ Expr { "," Expr } ] ")"
+				        | "(" Expr ")"
+Ident				 --> "a" - "z" {"a" - "z" "0" - "9" "_"}
+number			 --> integer
+				        | real
+integer			 --> "0" - "9" {"0" - "9"}
+real				 --> integer "." integer
