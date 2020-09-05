@@ -45,9 +45,6 @@ class Tokenizer:
             elif self.expr_str[self.current_pos].isspace():
                 continue
 
-            elif  self.current_pos == len(self.expr_str) - 1:  # Also cater for non newline terminated strs
-                tok = TokenInfo(Token.TOKEOLN, '\n', self.current_pos)
-
             elif  self.expr_str[self.current_pos] == '+':
                 tok = TokenInfo(Token.TOKPLUS, '+', self.current_pos)
 
@@ -120,7 +117,7 @@ class Tokenizer:
         """
             Finite state machine to recognize an number
             Using the production
-
+            real --> integer "." integer
         """
         state = 0
         lexeme = ""
@@ -175,7 +172,7 @@ class Tokenizer:
         return self.current_pos < self.length_of_expr_str
 
 if __name__ == "__main__":
-        expr_str = "2    + 5.4 * / hell kofi_1 = 4.334334 % { } 45.h min(1, 4, 5) ?"
+        expr_str = "2    + 5.4 * / hell kofi_1 = 4.334334 % { } 45.h min(1, 4, 5) ? 24@"
         tokenizer = Tokenizer(expr_str)
         token = tokenizer.get_next_token()
         print("\n\nThe input str is -> {}\n\n".format(expr_str))
