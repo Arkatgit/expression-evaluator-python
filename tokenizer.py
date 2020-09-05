@@ -80,7 +80,6 @@ class Tokenizer:
 
             else:
                 print("Error:Column {}: Unrecognized character '{}' found in input".format(self.current_pos + 1, self.expr_str[self.current_pos]))
-                self.current_pos += 1
 
         return tok
 
@@ -172,7 +171,7 @@ class Tokenizer:
         return self.current_pos < self.length_of_expr_str
 
 if __name__ == "__main__":
-        expr_str = "2    + 5.4 * / hell kofi_1 = 4.334334 % { } 45.h min(1, 4, 5) ? 24@"
+        expr_str = "2    + 5.4 * / hell kofi_1 = 4.334334 % { } 45.h min(1, 4, 5) ?24@"
         tokenizer = Tokenizer(expr_str)
         token = tokenizer.get_next_token()
         print("\n\nThe input str is -> {}\n\n".format(expr_str))
