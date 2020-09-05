@@ -6,6 +6,7 @@ UnaryExpr		 --> PrimaryExpr
 PrimaryExpr  --> number
 				        | Ident
 				        | Ident "(" [ Expr { "," Expr } ] ")"
+                | Ident ":=" Expr
 				        | "(" Expr ")"
 Ident				 --> "a" - "z" {"a" - "z" "0" - "9" "_"}
 number			 --> integer
