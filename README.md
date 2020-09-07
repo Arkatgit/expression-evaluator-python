@@ -1,4 +1,4 @@
-# spell-checker
+# expression-evaluator-python
 
 Description
 
@@ -19,7 +19,7 @@ Ident				 --> "a" - "z" {"a" - "z" "0" - "9" "_"}\
 number			 --> integer\
 				        | real\
 integer			 --> "0" - "9" {"0" - "9"}\
-real				 --> integer "." integer\
+real				 --> integer "." integer
 
 
 
