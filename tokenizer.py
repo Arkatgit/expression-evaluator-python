@@ -1,12 +1,8 @@
+import logging
 from dataclasses import dataclass
 from enum import Enum
 
-def repl(prompt: str = "Expr-> ") -> str:
-    while True:
-        expr_str = input(prompt)
-        print(expr_str)
-        if input == "quit":
-            return
+logger = logging.getLogger(__name__)
 
 class Token(Enum):
     TOKERR    = -1
@@ -39,47 +35,47 @@ class Tokenizer:
         tok = None
         while tok == None:
             self.current_pos += 1
-            if  self.current_pos >= len(self.expr_str) or self.expr_str[self.current_pos] == '\n':
+            if not self._is_index_within_range() or self.expr_str[self.current_pos] == '\n':
                 tok = TokenInfo(Token.TOKEOLN, '\n', self.current_pos)
             #skip whitespaces
             elif self.expr_str[self.current_pos].isspace():
                 continue
 
-            elif  self.expr_str[self.current_pos] == '+':
+            elif self.expr_str[self.current_pos] == '+':
                 tok = TokenInfo(Token.TOKPLUS, '+', self.current_pos)
 
-            elif  self.expr_str[self.current_pos] == '-':
+            elif self.expr_str[self.current_pos] == '-':
                 tok = TokenInfo(Token.TOKMINUS, '-', self.current_pos)
 
-            elif  self.expr_str[self.current_pos] == '*':
+            elif self.expr_str[self.current_pos] == '*':
                 tok = TokenInfo(Token.TOKMUL, '*', self.current_pos)
 
-            elif  self.expr_str[self.current_pos] == '/':
+            elif self.expr_str[self.current_pos] == '/':
                 tok = TokenInfo(Token.TOKDIVIDE, '/', self.current_pos)
 
-            elif  self.expr_str[self.current_pos] == '%':
+            elif self.expr_str[self.current_pos] == '%':
                 tok = TokenInfo(Token.TOKMOD, '%', self.current_pos)
 
-            elif  self.expr_str[self.current_pos] == '(':
+            elif self.expr_str[self.current_pos] == '(':
                 tok = TokenInfo(Token.TOKLPAREN, '(', self.current_pos)
 
-            elif  self.expr_str[self.current_pos] == ')':
+            elif self.expr_str[self.current_pos] == ')':
                 tok = TokenInfo(Token.TOKRPAREN, ')', self.current_pos)
 
-            elif  self.expr_str[self.current_pos] == ',':
+            elif self.expr_str[self.current_pos] == ',':
                 tok = TokenInfo(Token.TOKCOMMA, ',', self.current_pos)
 
-            elif  self.expr_str[self.current_pos] == '=':
+            elif self.expr_str[self.current_pos] == '=':
                 tok = TokenInfo(Token.TOKEQUAL, '=', self.current_pos)
 
-            elif  self.expr_str[self.current_pos].isalpha():
+            elif self.expr_str[self.current_pos].isalpha():
                 tok = self._scan_identifier()
 
-            elif  self.expr_str[self.current_pos].isdigit():
+            elif self.expr_str[self.current_pos].isdigit():
                 tok = self._scan_number()
 
             else:
-                print("Error:Column {}: Unrecognized character '{}' found in input".format(self.current_pos + 1, self.expr_str[self.current_pos]))
+                logger.error("Error:Column {}: Unrecognized character '{}' found in input".format(self.current_pos + 1, self.expr_str[self.current_pos]))
 
         return tok
 
@@ -107,7 +103,7 @@ class Tokenizer:
 
             elif state == 2:  #accept state
                 #backtrack and accept
-                self.current_pos -= 1
+                self.current_pos -= 2
                 return TokenInfo(Token.TOKIDENT, lexeme, col_no)
 
             self.current_pos += 1
@@ -129,11 +125,11 @@ class Tokenizer:
                     lexeme += self.expr_str[self.current_pos]
 
             elif state == 1:
-                if self._is_index_within_range and self.expr_str[self.current_pos].isdigit():
+                if self._is_index_within_range() and self.expr_str[self.current_pos].isdigit():
                     state = 1
                     lexeme += self.expr_str[self.current_pos]
 
-                elif self._is_index_within_range and self.expr_str[self.current_pos] == '.':
+                elif self._is_index_within_range() and self.expr_str[self.current_pos] == '.':
                     state = 2
                     lexeme += self.expr_str[self.current_pos]
 
@@ -148,12 +144,12 @@ class Tokenizer:
                           lexeme += self.expr_str[self.current_pos]
 
                       else:
-                            print("Error:Column {}: Number expected after '.' but found {}".format(self.current_pos + 1, self.expr_str[self.current_pos]))
+                            logger.error("Error:Column {}: Number expected after '.' but found {}".format(self.current_pos + 1, self.expr_str[self.current_pos]))
                             return None
 
 
             elif state == 3:
-                    if self._is_index_within_range and self.expr_str[self.current_pos].isdigit():
+                    if self._is_index_within_range() and self.expr_str[self.current_pos].isdigit():
                         state = 3
                         lexeme += self.expr_str[self.current_pos]
 
@@ -171,7 +167,7 @@ class Tokenizer:
         return self.current_pos < self.length_of_expr_str
 
 if __name__ == "__main__":
-        expr_str = "2    + 5.4 * / hell kofi_1 = 4.334334 % { } 45.h min(1, 4, 5) ?24@"
+        expr_str = "a = 2.3+4-0+o-call(45,)"
         tokenizer = Tokenizer(expr_str)
         token = tokenizer.get_next_token()
         print("\n\nThe input str is -> {}\n\n".format(expr_str))

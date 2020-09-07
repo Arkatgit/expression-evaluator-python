@@ -1,6 +1,6 @@
 Expr				 --> AddExpr
 AddExpr			 --> MulExpr { ("+" | "-") MulExpr }
-MulExpr			 --> UnaryExpr { ("*" | "/" | "mod") UnaryExpr }
+MulExpr			 --> UnaryExpr { ("*" | "/" | "%") UnaryExpr }
 UnaryExpr		 --> PrimaryExpr
 				        | ("+" | "-") UnaryExpr
 PrimaryExpr  --> number
