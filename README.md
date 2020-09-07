@@ -5,21 +5,21 @@ Description
 The evaluator is based on the grammar specific in the EBNF notation below:
 
 
-Expr				 --> AddExpr
-AddExpr			 --> MulExpr { ("+" | "-") MulExpr }
-MulExpr			 --> UnaryExpr { ("*" | "/" | "%") UnaryExpr }
-UnaryExpr		 --> PrimaryExpr
-				        | ("+" | "-") UnaryExpr
-PrimaryExpr  --> number
-				        | Ident
-				        | Ident "(" [ Expr { "," Expr } ] ")"
-                | Ident ":=" Expr
-				        | "(" Expr ")"
-Ident				 --> "a" - "z" {"a" - "z" "0" - "9" "_"}
-number			 --> integer
-				        | real
-integer			 --> "0" - "9" {"0" - "9"}
-real				 --> integer "." integer
+Expr				 --> AddExpr\
+AddExpr			 --> MulExpr { ("+" | "-") MulExpr }\
+MulExpr			 --> UnaryExpr { ("*" | "/" | "%") UnaryExpr }\
+UnaryExpr		 --> PrimaryExpr\
+				        | ("+" | "-") UnaryExpr\
+PrimaryExpr  --> number\
+				        | Ident\
+				        | Ident "(" [ Expr { "," Expr } ] ")"\
+                | Ident ":=" Expr\
+				        | "(" Expr ")"\
+Ident				 --> "a" - "z" {"a" - "z" "0" - "9" "_"}\
+number			 --> integer\
+				        | real\
+integer			 --> "0" - "9" {"0" - "9"}\
+real				 --> integer "." integer\
 
 
 
